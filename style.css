@@ -1,0 +1,2168 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #f6f6f2;
+    --surface: #ffffff;
+    --text: #121211;
+    --muted: #7c7c76;
+    --line: #deded8;
+    --soft-line: #e9e9e4;
+    --danger: #9b3030;
+    --accent: #8f8266;
+    --physics: #5f6f7b;
+    --music: #8e7659;
+    --thought: #73706a;
+    --shadow: rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="dark"] {
+    --bg: #111210;
+    --surface: #191a17;
+    --text: #f1f1ec;
+    --muted: #9b9b93;
+    --line: #373832;
+    --soft-line: #292a26;
+    --danger: #d57a7a;
+    --accent: #b6a987;
+    --physics: #8aa1b0;
+    --music: #b79b76;
+    --thought: #aaa69e;
+    --shadow: rgba(0, 0, 0, 0.24);
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:active {
+    transform: scale(0.985);
+}
+
+input,
+textarea,
+select {
+    color: var(--text);
+}
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.screen.active {
+    display: block;
+}
+
+
+/* ==================================================
+   START / HUBS
+================================================== */
+
+.home-shell,
+.hub-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding:
+        calc(30px + env(safe-area-inset-top))
+        22px
+        calc(36px + env(safe-area-inset-bottom));
+}
+
+.home-title {
+    margin-bottom: 64px;
+    font-size: 31px;
+    font-weight: 500;
+    letter-spacing: -0.8px;
+}
+
+.home-actions {
+    width: min(300px, 84vw);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.text-actions {
+    gap: 10px;
+}
+
+.home-tools {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+}
+
+.large-button {
+    width: 100%;
+    min-height: 58px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: transparent;
+    color: var(--text);
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.large-button.primary {
+    border-color: var(--text);
+    background: var(--text);
+    color: var(--bg);
+}
+
+.text-button,
+.quiet-button,
+.danger-text-button,
+.small-top-button,
+.session-action-button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.text-button {
+    padding: 6px 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.danger-text-button {
+    padding: 15px 0;
+    color: var(--danger);
+    font-size: 13px;
+}
+
+.quiet-button {
+    padding: 7px 0;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.small-top-button {
+    width: 52px;
+    height: 48px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   TOPBAR
+================================================== */
+
+.topbar {
+    min-height: calc(64px + env(safe-area-inset-top));
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) 52px;
+    align-items: end;
+    padding:
+        env(safe-area-inset-top)
+        12px
+        8px;
+    border-bottom: 1px solid var(--soft-line);
+}
+
+.topbar h1 {
+    margin: 0 0 12px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.icon-button {
+    position: relative;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+}
+
+.topbar-spacer {
+    width: 48px;
+    height: 48px;
+}
+
+
+/* ==================================================
+   CONTENT / FORMS
+================================================== */
+
+.page-content {
+    width: min(680px, 100%);
+    margin: 0 auto;
+    padding:
+        28px
+        20px
+        calc(88px + env(safe-area-inset-bottom));
+}
+
+.empty-message {
+    margin: 70px 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 14px;
+}
+
+.empty-message.compact {
+    margin: 36px 0;
+}
+
+.form-content,
+.review-form {
+    width: min(540px, calc(100% - 40px));
+    margin: 42px auto 0;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input,
+select {
+    height: 50px;
+    padding: 0;
+    font-size: 18px;
+}
+
+textarea {
+    min-height: 140px;
+    padding: 12px 0;
+    resize: vertical;
+    font-size: 17px;
+    line-height: 1.55;
+}
+
+textarea.long-textarea {
+    min-height: 220px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-bottom-color: var(--text);
+}
+
+.form-error {
+    min-height: 18px;
+    margin-top: 4px;
+    color: var(--danger);
+    font-size: 12px;
+}
+
+.primary-button,
+.secondary-button {
+    min-height: 54px;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.primary-button {
+    margin-top: 18px;
+    border: 1px solid var(--text);
+    background: var(--text);
+    color: var(--bg);
+}
+
+.secondary-button {
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text);
+}
+
+.wide-button {
+    width: 100%;
+}
+
+.two-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.section-marker {
+    margin-top: 34px;
+    padding-top: 20px;
+    border-top: 1px solid var(--soft-line);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.method-note {
+    margin: 4px 0 18px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* ==================================================
+   LIST ROWS
+================================================== */
+
+.plan-row,
+.text-row,
+.library-row {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--soft-line);
+}
+
+.row-main-button {
+    flex: 1;
+    min-width: 0;
+    padding: 18px 4px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+}
+
+.row-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 17px;
+}
+
+.row-subtitle {
+    margin-top: 4px;
+    overflow: hidden;
+    color: var(--muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.heart-button {
+    width: 50px;
+    height: 50px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   PLAN EDITOR
+================================================== */
+
+.editor-name-group {
+    margin-bottom: 22px;
+}
+
+.plan-item {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border-bottom: 1px solid var(--soft-line);
+}
+
+.item-number {
+    width: 24px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.item-information {
+    flex: 1;
+    min-width: 0;
+}
+
+.item-title {
+    font-size: 16px;
+}
+
+.item-details {
+    margin-top: 4px;
+    overflow: hidden;
+    color: var(--muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+}
+
+.move-button,
+.delete-item-button {
+    width: 32px;
+    height: 38px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.move-button:disabled {
+    opacity: 0.17;
+}
+
+.delete-item-button {
+    color: var(--muted);
+    font-size: 20px;
+}
+
+
+/* ==================================================
+   PLAN START OVERVIEW
+================================================== */
+
+.start-plan-item {
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--soft-line);
+}
+
+.start-item-left {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.start-item-number {
+    width: 22px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.start-item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.start-item-duration {
+    flex: none;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.start-plan-item.break .start-item-name {
+    color: var(--muted);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--text);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* ==================================================
+   PERSISTENTE SESSION-LEISTE
+================================================== */
+
+.mini-session {
+    position: fixed;
+    left: 50%;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    z-index: 1000;
+    width: min(430px, calc(100vw - 28px));
+    transform: translateX(-50%);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    box-shadow: 0 8px 28px var(--shadow);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.mini-session.hidden {
+    display: none;
+}
+
+.mini-session-button {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.mini-session-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.mini-session-time {
+    flex: none;
+    color: var(--muted);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.mini-session.pending .mini-session-time {
+    color: var(--text);
+    font-weight: 600;
+}
+
+
+/* ==================================================
+   SESSION / ZEITRESONATOR
+================================================== */
+
+.session-top-actions {
+    position: fixed;
+    top: calc(10px + env(safe-area-inset-top));
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 18px;
+    pointer-events: none;
+}
+
+.session-action-button {
+    min-height: 42px;
+    padding: 0 8px;
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: auto;
+}
+
+.session-content {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:
+        calc(72px + env(safe-area-inset-top))
+        20px
+        calc(28px + env(safe-area-inset-bottom));
+}
+
+.session-kicker {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.session-content > h1 {
+    margin: 12px 0 0;
+    text-align: center;
+    font-size: 29px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.session-progress {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.session-card {
+    width: min(330px, 90vw);
+    height: 430px;
+    margin-top: 30px;
+    perspective: 1200px;
+}
+
+.session-card.can-flip {
+    cursor: pointer;
+}
+
+.session-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.session-card.flipped .session-card-inner {
+    transform: rotateY(180deg);
+}
+
+.session-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border: 1px solid var(--soft-line);
+    border-radius: 24px;
+    background: var(--bg);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+}
+
+.session-back {
+    transform: rotateY(180deg);
+    padding: 38px 28px;
+}
+
+.resonance-clock {
+    width: 240px;
+    height: 260px;
+    overflow: visible;
+}
+
+.resonance-ghost,
+.resonance-progress {
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.resonance-ghost {
+    stroke: var(--soft-line);
+}
+
+.resonance-progress {
+    stroke: var(--physics);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 130px 130px;
+    transition: stroke-dashoffset 0.22s linear;
+}
+
+.orbit-line {
+    fill: none;
+    stroke: var(--physics);
+    stroke-width: 1;
+    opacity: 0.36;
+}
+
+.orbit-particle {
+    fill: var(--physics);
+    opacity: 0.85;
+}
+
+.orbit-particle.small {
+    opacity: 0.58;
+}
+
+.orbit-system {
+    transform-origin: 130px 130px;
+}
+
+.orbit-a {
+    animation: orbit-spin 9s linear infinite;
+}
+
+.orbit-b {
+    animation: orbit-spin-reverse 14s linear infinite;
+}
+
+.staff line {
+    stroke: var(--music);
+    stroke-width: 0.8;
+    opacity: 0.24;
+}
+
+.resonance-wave {
+    fill: none;
+    stroke: var(--music);
+    stroke-width: 1.5;
+    opacity: 0.58;
+    stroke-dasharray: 5 4;
+    animation: wave-drift 3.8s linear infinite;
+}
+
+.music-node,
+.music-stem {
+    fill: var(--music);
+    stroke: var(--music);
+    opacity: 0.68;
+}
+
+.note-a {
+    animation: note-pulse 3s ease-in-out infinite;
+}
+
+.note-b {
+    animation: note-pulse 3s ease-in-out 1.2s infinite;
+}
+
+.phi-symbol {
+    fill: var(--thought);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 44px;
+    font-style: italic;
+    opacity: 0.82;
+}
+
+.phase-hand {
+    transform-origin: 130px 130px;
+    transition: transform 0.22s linear;
+}
+
+.phase-hand line,
+.phase-hand circle {
+    stroke: var(--thought);
+    fill: var(--thought);
+    opacity: 0.42;
+    stroke-width: 1;
+}
+
+.session-card.finishing .orbit-a {
+    animation-duration: 0.55s;
+}
+
+.session-card.finishing .orbit-b {
+    animation-duration: 0.42s;
+}
+
+.session-card.finishing .resonance-wave {
+    animation-duration: 0.35s;
+}
+
+.session-card.finishing .resonance-clock {
+    animation: resonator-finish 0.48s ease-out forwards;
+}
+
+.session-timer {
+    margin-top: -2px;
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    font-variant-numeric: tabular-nums;
+}
+
+.flip-hint,
+.note-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.flip-hint {
+    margin-top: 14px;
+}
+
+.session-note {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    text-align: center;
+    white-space: pre-wrap;
+    font-size: 19px;
+    line-height: 1.55;
+}
+
+.review-content {
+    width: min(560px, 100%);
+    margin: 0 auto;
+    padding:
+        42px
+        20px
+        calc(90px + env(safe-area-inset-bottom));
+}
+
+.review-content > h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 27px;
+    font-weight: 500;
+}
+
+.review-form textarea {
+    min-height: 180px;
+}
+
+@keyframes orbit-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes orbit-spin-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+@keyframes wave-drift {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -36; }
+}
+
+@keyframes note-pulse {
+    0%, 100% { opacity: 0.35; transform: translateY(0); }
+    50% { opacity: 0.95; transform: translateY(-3px); }
+}
+
+@keyframes resonator-finish {
+    0% { transform: scale(1); opacity: 1; }
+    65% { transform: scale(1.04); opacity: 0.75; }
+    100% { transform: scale(0.96); opacity: 0.18; }
+}
+
+
+/* ==================================================
+   GEDANKEN
+================================================== */
+
+.document-editor {
+    width: min(780px, 100%);
+    min-height: calc(100vh - 65px);
+    min-height: calc(100dvh - 65px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding:
+        28px
+        20px
+        calc(90px + env(safe-area-inset-bottom));
+}
+
+.document-title-input {
+    height: auto;
+    padding: 4px 0 18px;
+    border: 0;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.document-body-input {
+    flex: 1;
+    min-height: 60vh;
+    padding: 20px 0;
+    border-top: 1px solid var(--soft-line);
+    border-bottom: 0;
+    font-size: 17px;
+    line-height: 1.65;
+}
+
+.editor-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--soft-line);
+    color: var(--muted);
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   TAGE / TRÄUME
+================================================== */
+
+.journal-editor,
+.dream-editor {
+    margin-top: 26px;
+}
+
+.day-mood {
+    margin-left: 10px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.dream-analysis-tag {
+    margin-left: 10px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+
+/* ==================================================
+   REVIEW LIBRARY
+================================================== */
+
+.breadcrumbs {
+    min-height: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.breadcrumb-button {
+    padding: 2px 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.breadcrumb-separator {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.library-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.library-toolbar select {
+    width: auto;
+    min-width: 130px;
+    height: 38px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.library-row.folder .row-title::before {
+    content: "▢";
+    margin-right: 9px;
+    color: var(--muted);
+}
+
+.library-rating {
+    margin-right: 8px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.library-more-button {
+    width: 40px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.library-move-controls {
+    display: flex;
+}
+
+.library-move-controls button {
+    width: 30px;
+    height: 38px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.library-move-controls button:disabled {
+    opacity: 0.17;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 420px) {
+    .page-content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .session-card {
+        height: 410px;
+    }
+
+    .resonance-clock {
+        width: 222px;
+        height: 245px;
+    }
+
+    .two-buttons {
+        gap: 8px;
+    }
+
+    .library-toolbar {
+        align-items: flex-end;
+    }
+}
+
+
+/* ==================================================
+   V3 — GRAVITATIONSUHR
+================================================== */
+
+.gravity-clock {
+    width: 286px;
+    height: 246px;
+    overflow: visible;
+}
+
+.gravity-track {
+    fill: none;
+    stroke: var(--physics);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dashoffset 0.18s linear;
+}
+
+.gravity-track.ghost {
+    stroke: var(--soft-line);
+    stroke-width: 1.5;
+}
+
+.gravity-ball circle {
+    fill: var(--text);
+}
+
+.ball-radius {
+    stroke: var(--bg);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+}
+
+.track-point {
+    fill: var(--muted);
+    opacity: 0.38;
+}
+
+.track-point.end {
+    fill: var(--physics);
+    opacity: 0.72;
+}
+
+.gravity-vector {
+    stroke: var(--muted);
+    stroke-width: 1;
+    opacity: 0.45;
+}
+
+.gravity-vector-head {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1;
+    opacity: 0.45;
+}
+
+.gravity-label {
+    fill: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.62;
+}
+
+.curve-name {
+    min-height: 18px;
+    margin-top: 2px;
+    color: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0.02em;
+}
+
+
+/* ==================================================
+   V3 — PLAN ABSCHLUSS
+================================================== */
+
+.completion-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: min(620px, 100%);
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding:
+        calc(52px + env(safe-area-inset-top))
+        28px
+        calc(52px + env(safe-area-inset-bottom));
+}
+
+.completion-kicker {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.completion-quote {
+    max-width: 520px;
+    margin: 54px 0 0;
+    padding: 0;
+
+    border: 0;
+
+    text-align: center;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(24px, 6vw, 36px);
+    line-height: 1.32;
+    font-weight: 400;
+}
+
+.completion-source {
+    max-width: 460px;
+    margin-top: 24px;
+
+    color: var(--muted);
+    text-align: center;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.completion-button {
+    width: min(280px, 78vw);
+    margin-top: 64px;
+}
+
+
+/* ==================================================
+   V3 — GEDANKEN-ORDNER
+================================================== */
+
+.toolbar-caption {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.folder-row .row-title::before {
+    content: "▢";
+    margin-right: 9px;
+    color: var(--muted);
+}
+
+
+/* ==================================================
+   V3 — RICH-TEXT GEDANKEN
+================================================== */
+
+.tools-button {
+    font-size: 17px;
+    letter-spacing: 2px;
+}
+
+.thought-tools-menu {
+    position: fixed;
+    top: calc(62px + env(safe-area-inset-top));
+    right: 14px;
+    z-index: 1200;
+
+    width: min(286px, calc(100vw - 28px));
+
+    padding: 12px;
+
+    border: 1px solid var(--line);
+    border-radius: 16px;
+
+    background: var(--surface);
+    box-shadow: 0 14px 42px var(--shadow);
+}
+
+.thought-tools-menu.hidden {
+    display: none;
+}
+
+.tool-row {
+    width: 100%;
+    min-height: 42px;
+
+    padding: 0 4px;
+
+    border: 0;
+
+    background: transparent;
+    color: var(--text);
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.tool-divider {
+    height: 1px;
+    margin: 5px 0 10px;
+    background: var(--soft-line);
+}
+
+.tool-label {
+    margin: 10px 0 7px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.tool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.format-button {
+    min-height: 38px;
+
+    padding: 5px 7px;
+
+    border: 1px solid var(--line);
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text);
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.serif-sample {
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.mono-sample {
+    font-family: Menlo, Monaco, monospace;
+}
+
+.strong-sample {
+    font-weight: 700;
+}
+
+.underline-sample {
+    text-decoration: underline;
+}
+
+.color-tool {
+    margin-top: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.color-tool input[type="color"] {
+    width: 42px;
+    height: 30px;
+
+    border: 0;
+    padding: 0;
+
+    background: transparent;
+}
+
+.rich-document-body {
+    flex: 1;
+
+    min-height: 58vh;
+
+    padding: 20px 0;
+
+    border-top: 1px solid var(--soft-line);
+
+    outline: none;
+
+    overflow-wrap: anywhere;
+
+    font-size: 17px;
+    line-height: 1.65;
+}
+
+.rich-document-body:empty::before {
+    content: "";
+}
+
+.thought-folder-label {
+    margin-top: 16px;
+}
+
+
+/* Improve mini-session distinction when the full plan is done */
+.mini-session.pending {
+    border-color: color-mix(in srgb, var(--text) 28%, var(--line));
+}
+
+
+/* Mobile */
+@media (max-width: 420px) {
+    .gravity-clock {
+        width: 260px;
+        height: 232px;
+    }
+
+    .completion-quote {
+        margin-top: 46px;
+    }
+
+    .thought-tools-menu {
+        top: calc(58px + env(safe-area-inset-top));
+    }
+}
+
+
+/* ==================================================
+   V4 — RADIKAL REDUZIERTE OBERFLÄCHE
+================================================== */
+
+/* Start: keine Überschrift, nur die beiden zentralen Wege */
+.home-shell {
+    justify-content: center;
+}
+
+.home-title {
+    display: none !important;
+}
+
+.home-actions {
+    align-items: center;
+}
+
+
+/* --------------------------------------------------
+   ALLE BUTTONS: NUR TEXT
+-------------------------------------------------- */
+
+button,
+.large-button,
+.large-button.primary,
+.primary-button,
+.secondary-button,
+.text-button,
+.quiet-button,
+.danger-text-button,
+.small-top-button,
+.icon-button,
+.heart-button,
+.move-button,
+.delete-item-button,
+.library-more-button,
+.library-move-controls button,
+.format-button,
+.tool-row,
+.breadcrumb-button,
+.session-action-button,
+.mini-session-button {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.large-button,
+.large-button.primary,
+.primary-button,
+.secondary-button {
+    min-height: 48px;
+    width: auto;
+    padding: 8px 12px;
+    color: var(--text);
+}
+
+.large-button.primary,
+.primary-button {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.home-actions {
+    width: auto;
+    gap: 22px;
+}
+
+.home-actions .large-button {
+    min-width: 0;
+    font-size: 20px;
+}
+
+.text-actions {
+    gap: 14px;
+}
+
+.text-actions .large-button {
+    font-size: 18px;
+}
+
+
+/* Tool-/Formatierungsbuttons bleiben unterscheidbar nur über Typografie */
+.format-button {
+    padding: 8px 4px;
+    min-height: 36px;
+}
+
+.tool-grid {
+    gap: 8px 14px;
+}
+
+
+/* --------------------------------------------------
+   SESSION: VORDERSEITE IST NUR BEWEGUNG + ZEIT
+-------------------------------------------------- */
+
+.session-content {
+    justify-content: center;
+    padding:
+        calc(20px + env(safe-area-inset-top))
+        14px
+        calc(20px + env(safe-area-inset-bottom));
+}
+
+.session-card {
+    width: min(360px, 96vw);
+    height: min(540px, 84dvh);
+    margin: 0;
+}
+
+.session-face {
+    padding: 18px;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+}
+
+.session-front {
+    justify-content: center;
+}
+
+.session-back {
+    padding: 36px 26px;
+    justify-content: center;
+}
+
+.session-front .gravity-clock {
+    width: min(310px, 86vw);
+    height: auto;
+}
+
+.session-timer {
+    margin-top: 8px;
+    font-size: clamp(44px, 14vw, 64px);
+    font-weight: 250;
+}
+
+.curve-name,
+.flip-hint {
+    display: none !important;
+}
+
+.session-back .session-kicker {
+    margin-bottom: 12px;
+}
+
+.session-back > h1 {
+    margin: 0;
+    max-width: 100%;
+    text-align: center;
+    font-size: clamp(25px, 8vw, 36px);
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.session-back .session-progress {
+    margin-top: 8px;
+}
+
+.session-note-wrap {
+    width: min(310px, 82vw);
+    min-height: 120px;
+    margin-top: 38px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.session-note-wrap .note-label {
+    margin-bottom: 16px;
+}
+
+.session-note {
+    width: 100%;
+    flex: initial;
+    max-height: 210px;
+}
+
+.session-back-actions {
+    margin-top: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 42px;
+}
+
+.session-action-button {
+    position: static;
+    min-height: 40px;
+    padding: 6px 4px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.session-top-actions {
+    display: none !important;
+}
+
+
+/* Die Mini-Session bleibt sichtbar, aber ebenfalls ohne Kasten */
+.mini-session {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+.mini-session-button {
+    padding: 0 4px;
+}
+
+.mini-session-name,
+.mini-session-time {
+    text-shadow:
+        0 1px 0 var(--bg),
+        0 -1px 0 var(--bg);
+}
+
+
+/* Tool-Menü: kein visueller Kasten mehr */
+.thought-tools-menu {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: var(--bg);
+}
+
+
+/* Completion ebenfalls ganz ohne Button-Kasten */
+.completion-button {
+    width: auto;
+}
+
+
+/* Mobile Feinabstimmung */
+@media (max-width: 420px) {
+    .session-card {
+        width: 96vw;
+        height: 80dvh;
+    }
+
+    .session-front .gravity-clock {
+        width: 88vw;
+        max-width: 300px;
+    }
+
+    .session-back-actions {
+        margin-top: 38px;
+        gap: 36px;
+    }
+}
+
+
+/* ==================================================
+   V5 — TYPOGRAFIE / ZENTRIERUNG
+================================================== */
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+.hero-link,
+.section-link {
+    font-family:
+        "Avenir Next",
+        "Helvetica Neue",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+    font-weight: 300 !important;
+    letter-spacing: -0.035em;
+}
+
+.hero-link {
+    font-size: clamp(29px, 7vw, 34px) !important;
+    line-height: 1.15;
+}
+
+.section-link {
+    font-size: clamp(22px, 5.6vw, 27px) !important;
+    line-height: 1.15;
+}
+
+.home-primary-actions {
+    gap: 26px !important;
+}
+
+.corner-link {
+    position: fixed;
+    top: calc(18px + env(safe-area-inset-top));
+    z-index: 1100;
+
+    min-height: 38px;
+    padding: 4px 8px;
+
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+
+    font-size: 13px;
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+.corner-left {
+    left: 14px;
+}
+
+.corner-right {
+    right: 14px;
+}
+
+
+/* ==================================================
+   V5 — TEXTE HUB / MENÜ
+================================================== */
+
+.texts-hub-screen {
+    overflow: hidden;
+}
+
+.texts-center {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        calc(58px + env(safe-area-inset-top))
+        20px
+        calc(34px + env(safe-area-inset-bottom));
+
+    overflow: hidden;
+}
+
+.text-actions {
+    width: min(310px, 88vw);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: clamp(9px, 2.3vh, 18px);
+}
+
+.text-actions .large-button {
+    min-height: clamp(38px, 6.3vh, 52px);
+    margin: 0;
+    padding: 3px 10px;
+}
+
+.texts-menu-panel {
+    position: fixed;
+    top: calc(55px + env(safe-area-inset-top));
+    left: 18px;
+    z-index: 1200;
+
+    min-width: 156px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 8px;
+
+    padding: 11px 0;
+
+    background: var(--bg);
+}
+
+.texts-menu-panel.hidden {
+    display: none;
+}
+
+.menu-link {
+    min-height: 34px;
+    padding: 4px 8px;
+
+    border: 0;
+    background: transparent;
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 350;
+
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   V5 — KOSMOLOGISCHE FOKUSANSICHT
+================================================== */
+
+.session-screen {
+    overflow: hidden;
+}
+
+.session-content {
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 0 !important;
+    margin: 0;
+
+    display: block;
+}
+
+.session-card {
+    position: absolute;
+    inset: 0;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    margin: 0 !important;
+
+    perspective: 1500px;
+}
+
+.session-face {
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    background: var(--bg) !important;
+}
+
+.universe-front {
+    display: block;
+    overflow: hidden;
+}
+
+.universe-canvas {
+    display: block;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    touch-action: manipulation;
+    cursor: crosshair;
+}
+
+.session-info-back {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        calc(44px + env(safe-area-inset-top))
+        28px
+        calc(40px + env(safe-area-inset-bottom))
+        !important;
+}
+
+.session-back-title {
+    max-width: min(520px, 88vw);
+
+    margin: 0;
+
+    text-align: center;
+
+    font-family:
+        "Avenir Next",
+        "Helvetica Neue",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    font-size: clamp(25px, 7vw, 34px) !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.035em;
+    line-height: 1.18;
+}
+
+.session-back-timer {
+    margin-top: 24px;
+
+    font-family:
+        "Avenir Next",
+        "Helvetica Neue",
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+    font-size: clamp(41px, 12vw, 58px);
+    font-weight: 200;
+    letter-spacing: -0.045em;
+    font-variant-numeric: tabular-nums;
+}
+
+.session-info-back .session-progress {
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.session-note-wrap {
+    width: min(460px, 84vw);
+    min-height: 0;
+
+    margin-top: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.session-note {
+    width: 100%;
+    max-height: min(25vh, 180px);
+
+    overflow: auto;
+
+    text-align: center;
+    white-space: pre-wrap;
+
+    color: var(--text);
+
+    font-size: clamp(15px, 4vw, 18px);
+    line-height: 1.55;
+}
+
+.session-back-actions {
+    margin-top: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 48px;
+}
+
+.session-action-button {
+    min-height: 40px;
+
+    padding: 5px;
+
+    border: 0;
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+
+/* no box, no front text, no hidden legacy hints */
+.gravity-clock,
+.gravity-track,
+.gravity-ball,
+.gravity-vector,
+.gravity-vector-head,
+.gravity-label,
+.track-point,
+.curve-name,
+.session-front .session-timer,
+.session-front .flip-hint {
+    display: none !important;
+}
+
+
+/* ==================================================
+   V5 — COMPLETION
+================================================== */
+
+.completion-quote {
+    max-width: 560px;
+    font-size: clamp(23px, 5.8vw, 34px);
+}
+
+.completion-source {
+    max-width: 520px;
+}
+
+
+/* ==================================================
+   V5 — MOBILE HEIGHT SAFETY
+================================================== */
+
+@media (max-height: 650px) {
+    .text-actions {
+        gap: 6px;
+    }
+
+    .text-actions .large-button {
+        min-height: 34px;
+        font-size: 20px !important;
+    }
+
+    .session-note-wrap {
+        margin-top: 20px;
+    }
+
+    .session-back-actions {
+        margin-top: 24px;
+    }
+}
+
+
+/* ==================================================
+   V6 — NAVIGATION
+================================================== */
+
+.corner-left {
+    left: 14px !important;
+    right: auto !important;
+}
+
+.corner-right {
+    right: 14px !important;
+    left: auto !important;
+}
+
+.texts-menu-panel {
+    left: auto !important;
+    right: 18px !important;
+    align-items: flex-end !important;
+}
+
+
+/* ==================================================
+   V6 — SESSION IST WIRKLICH VOLLBILD
+================================================== */
+
+#sessionScreen,
+.session-screen {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    overflow: hidden !important;
+}
+
+#sessionScreen .session-content {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#sessionScreen .session-card {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    min-width: 100vw !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+
+    max-width: none !important;
+    max-height: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    perspective: 1800px !important;
+}
+
+#sessionScreen .session-card-inner {
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#sessionScreen .session-face {
+    position: absolute !important;
+    inset: 0 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 100% !important;
+    min-height: 100% !important;
+
+    margin: 0 !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    background: var(--bg) !important;
+}
+
+#sessionScreen .universe-front {
+    display: block !important;
+}
+
+#sessionScreen .universe-canvas {
+    display: block !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: 0 !important;
+}
+
+#sessionScreen .session-info-back {
+    display: flex !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding:
+        calc(50px + env(safe-area-inset-top))
+        28px
+        calc(44px + env(safe-area-inset-bottom))
+        !important;
+}
+
+
+/* circular universe: points themselves define the circle; no frame */
+.universe-canvas {
+    background: var(--bg);
+}

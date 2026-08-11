@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f6f6f2">
+    <title>Planer</title>
+    <link rel="stylesheet" href="style.css?v=9">
+    <script src="app.js?v=9" defer></script>
+</head>
+<body>
+
+<input id="backupFileInput" type="file" accept="application/json,.json" hidden>
+
+<!-- PERSISTENTE SESSION-LEISTE -->
+<div id="miniSessionBar" class="mini-session hidden">
+    <button id="miniSessionButton" class="mini-session-button" type="button">
+        <span id="miniSessionName" class="mini-session-name"></span>
+        <span id="miniSessionTime" class="mini-session-time"></span>
+    </button>
+</div>
+
+
+<!-- ==================================================
+     START
+================================================== -->
+
+<section id="homeScreen" class="screen active">
+    <main class="home-shell">
+        <div class="home-actions home-primary-actions">
+            <button id="openPlannerButton" class="large-button hero-link" type="button">Planer</button>
+            <button id="openTextsButton" class="large-button hero-link" type="button">Texte</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     PLANER HUB
+================================================== -->
+
+<section id="plannerHubScreen" class="screen">
+    <button id="backFromPlannerHub" class="corner-link corner-left" type="button">Zurück</button>
+
+    <main class="hub-shell">
+        <div class="home-actions home-primary-actions">
+            <button id="plannerStartButton" class="large-button hero-link" type="button">Start</button>
+            <button id="plannerPlansButton" class="large-button hero-link" type="button">Pläne</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     START-ÜBERSICHT
+================================================== -->
+
+<section id="startOverviewScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromStartOverview" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1 id="startPlanTitle">Start</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="page-content">
+        <div id="noActivePlanMessage" class="empty-message">Kein aktiver Plan.</div>
+
+        <div id="activePlanOverview">
+            <div id="startPlanItems"></div>
+
+            <div class="total-row">
+                <span>Gesamtdauer</span>
+                <span id="totalPlanDuration"></span>
+            </div>
+
+            <button id="goButton" class="primary-button wide-button" type="button">Los</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     PLÄNE
+================================================== -->
+
+<section id="plansScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromPlans" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Pläne</h1>
+        <button id="addPlanButton" class="icon-button" type="button" aria-label="Plan hinzufügen">+</button>
+    </header>
+
+    <main class="page-content">
+        <div id="emptyPlansMessage" class="empty-message">Noch keine Pläne.</div>
+        <div id="plansList"></div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     NEUER PLAN
+================================================== -->
+
+<section id="newPlanScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromNewPlan" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Neuer Plan</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="form-content">
+        <label for="planName">Name</label>
+        <input id="planName" type="text" autocomplete="off">
+
+        <div id="newPlanError" class="form-error"></div>
+
+        <button id="createPlanButton" class="primary-button" type="button">Weiter</button>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     PLANEDITOR
+================================================== -->
+
+<section id="planEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1 id="editorPlanTitle">Plan</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="page-content">
+        <div class="field-group editor-name-group">
+            <label for="editorPlanName">Name</label>
+            <input id="editorPlanName" type="text" autocomplete="off">
+        </div>
+
+        <div id="planItems"></div>
+        <div id="emptyPlanMessage" class="empty-message compact">Dieser Plan ist leer.</div>
+
+        <div class="two-buttons">
+            <button id="addTaskButton" class="secondary-button" type="button">+ Aufgabe</button>
+            <button id="addBreakButton" class="secondary-button" type="button">+ Pause</button>
+        </div>
+
+        <div id="editorError" class="form-error"></div>
+
+        <button id="savePlanButton" class="primary-button wide-button" type="button">Speichern</button>
+        <button id="deletePlanButton" class="danger-text-button wide-button" type="button">Plan löschen</button>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     AUFGABE / PAUSE
+================================================== -->
+
+<section id="taskScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromTask" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Aufgabe</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="form-content">
+        <label for="taskName">Name</label>
+        <input id="taskName" type="text" autocomplete="off">
+
+        <label for="taskDuration">Minuten</label>
+        <input id="taskDuration" type="number" min="1" step="1" inputmode="numeric">
+
+        <label for="taskNote">Notiz</label>
+        <textarea id="taskNote"></textarea>
+
+        <div id="taskError" class="form-error"></div>
+
+        <button id="saveTaskButton" class="primary-button" type="button">Hinzufügen</button>
+    </main>
+</section>
+
+<section id="breakScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromBreak" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Pause</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="form-content">
+        <label for="breakDuration">Minuten</label>
+        <input id="breakDuration" type="number" min="1" step="1" inputmode="numeric">
+
+        <div id="breakError" class="form-error"></div>
+
+        <button id="saveBreakButton" class="primary-button" type="button">Hinzufügen</button>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     LAUFENDER PLAN — EXPANDIERENDES UNIVERSUM
+================================================== -->
+
+<section id="sessionScreen" class="screen session-screen">
+    <main class="session-content">
+        <div id="sessionCard" class="session-card can-flip">
+            <div class="session-card-inner">
+
+                <!-- VORDERSEITE: NUR UNIVERSUM -->
+                <div class="session-face session-front universe-front">
+                    <canvas id="universeCanvas" class="universe-canvas"></canvas>
+                </div>
+
+                <!-- RÜCKSEITE: REDUZIERTE INFORMATION -->
+                <div class="session-face session-back session-info-back">
+                    <div id="sessionType" hidden></div>
+
+                    <h1 id="sessionTitle" class="session-back-title"></h1>
+                    <div id="sessionTimer" class="session-back-timer">00:00</div>
+                    <div id="sessionProgress" class="session-progress"></div>
+
+                    <div id="sessionNoteWrap" class="session-note-wrap">
+                        <div id="sessionNote" class="session-note"></div>
+                    </div>
+
+                    <div class="session-back-actions">
+                        <button id="sessionMenuButton" class="session-action-button" type="button">Menü</button>
+                        <button id="sessionEndButton" class="session-action-button" type="button">Ende</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="sessionCurveName" hidden></div>
+        <div id="sessionFlipHint" hidden></div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     REVIEW NACH AUFGABE
+================================================== -->
+
+<section id="sessionReviewScreen" class="screen">
+    <header class="topbar">
+        <div class="topbar-spacer"></div>
+        <h1>Abgeschlossen</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="review-content">
+        <h2 id="reviewTitle"></h2>
+
+        <div class="review-form">
+            <label for="reviewNote">Notiz</label>
+            <textarea id="reviewNote"></textarea>
+
+            <label for="reviewDuration">Minuten</label>
+            <input id="reviewDuration" type="number" min="1" step="1" inputmode="numeric">
+
+            <div id="reviewError" class="form-error"></div>
+
+            <button id="saveReviewButton" class="primary-button wide-button" type="button">Speichern & weiter</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     PLAN ABGESCHLOSSEN
+================================================== -->
+
+<section id="planCompleteScreen" class="screen">
+    <main class="completion-shell">
+        <div class="completion-kicker">Plan abgeschlossen</div>
+
+        <blockquote id="nietzscheQuote" class="completion-quote"></blockquote>
+        <div id="nietzscheSource" class="completion-source"></div>
+
+        <button id="completePlanButton" class="primary-button completion-button" type="button">
+            Abschließen
+        </button>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     TEXTE HUB
+================================================== -->
+
+<section id="textsHubScreen" class="screen texts-hub-screen">
+    <button id="backFromTextsHub" class="corner-link corner-left" type="button">Zurück</button>
+    <button id="textsMenuButton" class="corner-link corner-right" type="button">Menü</button>
+
+    <div id="textsMenuPanel" class="texts-menu-panel hidden">
+        <button id="backupButton" class="menu-link" type="button">Backup</button>
+        <button id="restoreButton" class="menu-link" type="button">Wiederherstellen</button>
+        <button id="themeButton" class="menu-link" type="button">Nacht</button>
+    </div>
+
+    <main class="texts-center">
+        <div class="text-actions">
+            <button id="openThoughtsButton" class="large-button section-link" type="button">Gedanken</button>
+            <button id="openDaysButton" class="large-button section-link" type="button">Tage</button>
+            <button id="openDreamsButton" class="large-button section-link" type="button">Träume</button>
+            <button id="openFilmsButton" class="large-button section-link" type="button">Filme</button>
+            <button id="openBooksButton" class="large-button section-link" type="button">Bücher</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     GEDANKEN
+================================================== -->
+
+<section id="thoughtListScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromThoughtList" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Gedanken</h1>
+        <button id="addThoughtButton" class="icon-button" type="button" aria-label="Gedanke hinzufügen">+</button>
+    </header>
+
+    <main class="page-content">
+        <div id="thoughtBreadcrumbs" class="breadcrumbs"></div>
+
+        <div class="library-toolbar">
+            <button id="addThoughtFolderButton" class="quiet-button" type="button">+ Ordner</button>
+            <span class="toolbar-caption">Manuell sortiert</span>
+        </div>
+
+        <div id="thoughtEmpty" class="empty-message">Noch keine Gedanken.</div>
+        <div id="thoughtList"></div>
+    </main>
+</section>
+
+<section id="thoughtFolderEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromThoughtFolderEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Ordner</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="form-content">
+        <label for="thoughtFolderName">Name</label>
+        <input id="thoughtFolderName" type="text" autocomplete="off">
+
+        <div id="thoughtFolderError" class="form-error"></div>
+
+        <button id="saveThoughtFolderButton" class="primary-button" type="button">Speichern</button>
+        <button id="deleteThoughtFolderButton" class="danger-text-button" type="button">Ordner löschen</button>
+    </main>
+</section>
+
+<section id="thoughtEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromThoughtEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Gedanke</h1>
+        <button id="thoughtToolsButton" class="small-top-button tools-button" type="button" aria-label="Werkzeuge">•••</button>
+    </header>
+
+    <div id="thoughtToolsMenu" class="thought-tools-menu hidden">
+        <button id="thoughtPdfButton" class="tool-row" type="button">PDF</button>
+
+        <div class="tool-divider"></div>
+
+        <div class="tool-label">Schrift</div>
+        <div class="tool-grid">
+            <button class="format-button" type="button" data-command="fontName" data-value="Helvetica">System</button>
+            <button class="format-button serif-sample" type="button" data-command="fontName" data-value="Georgia">Serif</button>
+            <button class="format-button mono-sample" type="button" data-command="fontName" data-value="Menlo">Mono</button>
+        </div>
+
+        <div class="tool-label">Größe</div>
+        <div class="tool-grid">
+            <button class="format-button" type="button" data-command="fontSize" data-value="2">Klein</button>
+            <button class="format-button" type="button" data-command="fontSize" data-value="3">Normal</button>
+            <button class="format-button" type="button" data-command="fontSize" data-value="5">Groß</button>
+        </div>
+
+        <div class="tool-label">Stil</div>
+        <div class="tool-grid">
+            <button class="format-button strong-sample" type="button" data-command="bold">Fett</button>
+            <button class="format-button underline-sample" type="button" data-command="underline">Unterstrichen</button>
+        </div>
+
+        <label class="color-tool" for="thoughtColor">
+            Farbe
+            <input id="thoughtColor" type="color" value="#111111">
+        </label>
+    </div>
+
+    <main class="document-editor">
+        <input id="thoughtTitle" class="document-title-input" type="text" autocomplete="off">
+
+        <div
+            id="thoughtBody"
+            class="rich-document-body"
+            contenteditable="true"
+            role="textbox"
+            aria-multiline="true"
+        ></div>
+
+        <label class="thought-folder-label" for="thoughtFolderSelect">Ordner</label>
+        <select id="thoughtFolderSelect"></select>
+
+        <div class="editor-footer">
+            <span id="thoughtSaveState">Gespeichert</span>
+            <button id="deleteThoughtButton" class="danger-text-button" type="button">Löschen</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     TAGE
+================================================== -->
+
+<section id="dayListScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromDayList" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Tage</h1>
+        <button id="addDayButton" class="icon-button" type="button" aria-label="Tagebucheintrag hinzufügen">+</button>
+    </header>
+
+    <main class="page-content">
+        <div id="dayEmpty" class="empty-message">Noch keine Tage.</div>
+        <div id="dayList"></div>
+    </main>
+</section>
+
+<section id="dayEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromDayEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Tag</h1>
+        <button id="dayPdfButton" class="small-top-button" type="button">PDF</button>
+    </header>
+
+    <main class="form-content journal-editor">
+        <label for="dayDate">Datum</label>
+        <input id="dayDate" type="date">
+
+        <label for="dayTitle">Titel</label>
+        <input id="dayTitle" type="text" autocomplete="off">
+
+        <label for="dayMood">Stimmung</label>
+        <select id="dayMood">
+            <option value=""></option>
+            <option value="1">1 — schwer</option>
+            <option value="2">2</option>
+            <option value="3">3 — ruhig</option>
+            <option value="4">4</option>
+            <option value="5">5 — leicht</option>
+        </select>
+
+        <label for="dayBody">Der Tag</label>
+        <textarea id="dayBody" class="long-textarea"></textarea>
+
+        <label for="dayReflection">Was bleibt</label>
+        <textarea id="dayReflection"></textarea>
+
+        <div class="editor-footer">
+            <span id="daySaveState">Gespeichert</span>
+            <button id="deleteDayButton" class="danger-text-button" type="button">Löschen</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     TRÄUME
+================================================== -->
+
+<section id="dreamListScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromDreamList" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Träume</h1>
+        <button id="addDreamButton" class="icon-button" type="button" aria-label="Traum hinzufügen">+</button>
+    </header>
+
+    <main class="page-content">
+        <div class="method-note">
+            Assoziationen vor Symbolen.
+        </div>
+
+        <div id="dreamEmpty" class="empty-message">Noch keine Träume.</div>
+        <div id="dreamList"></div>
+    </main>
+</section>
+
+<section id="dreamEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromDreamEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Traum</h1>
+        <button id="dreamPdfButton" class="small-top-button" type="button">PDF</button>
+    </header>
+
+    <main class="form-content dream-editor">
+        <label for="dreamDate">Datum</label>
+        <input id="dreamDate" type="date">
+
+        <label for="dreamTitle">Titel</label>
+        <input id="dreamTitle" type="text" autocomplete="off">
+
+        <div class="section-marker">Manifester Traum</div>
+
+        <label for="dreamManifest">Traum</label>
+        <textarea id="dreamManifest" class="long-textarea"></textarea>
+
+        <label for="dreamAffect">Affekte</label>
+        <textarea id="dreamAffect"></textarea>
+
+        <label for="dreamDayResidue">Tagesreste</label>
+        <textarea id="dreamDayResidue"></textarea>
+
+        <div class="section-marker">Freie Assoziation</div>
+
+        <label for="dreamAssociations">Assoziationen</label>
+        <textarea id="dreamAssociations" class="long-textarea"></textarea>
+
+        <div class="section-marker">Traumarbeit</div>
+
+        <label for="dreamCondensation">Verdichtung</label>
+        <textarea id="dreamCondensation"></textarea>
+
+        <label for="dreamDisplacement">Verschiebung</label>
+        <textarea id="dreamDisplacement"></textarea>
+
+        <label for="dreamWishConflict">Wunsch / Konflikt</label>
+        <textarea id="dreamWishConflict"></textarea>
+
+        <div class="section-marker">Deutung</div>
+
+        <label for="dreamInterpretation">Hypothese</label>
+        <textarea id="dreamInterpretation" class="long-textarea"></textarea>
+
+        <div class="editor-footer">
+            <span id="dreamSaveState">Gespeichert</span>
+            <button id="deleteDreamButton" class="danger-text-button" type="button">Löschen</button>
+        </div>
+    </main>
+</section>
+
+
+<!-- ==================================================
+     FILM / LITERATUR
+================================================== -->
+
+<section id="reviewLibraryScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromReviewLibrary" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1 id="reviewLibraryTitle">Filme</h1>
+        <button id="addReviewEntryButton" class="icon-button" type="button" aria-label="Eintrag hinzufügen">+</button>
+    </header>
+
+    <main class="page-content">
+        <div id="reviewBreadcrumbs" class="breadcrumbs"></div>
+
+        <div class="library-toolbar">
+            <button id="addFolderButton" class="quiet-button" type="button">+ Ordner</button>
+
+            <select id="reviewSortSelect" aria-label="Sortierung">
+                <option value="manual">Manuell</option>
+                <option value="title">Titel</option>
+                <option value="ratingDesc">Bewertung ↓</option>
+                <option value="ratingAsc">Bewertung ↑</option>
+            </select>
+        </div>
+
+        <div id="reviewLibraryEmpty" class="empty-message compact">Noch keine Einträge.</div>
+        <div id="reviewLibraryList"></div>
+    </main>
+</section>
+
+<section id="folderEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromFolderEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1>Ordner</h1>
+        <div class="topbar-spacer"></div>
+    </header>
+
+    <main class="form-content">
+        <label for="folderName">Name</label>
+        <input id="folderName" type="text" autocomplete="off">
+
+        <div id="folderError" class="form-error"></div>
+
+        <button id="saveFolderButton" class="primary-button" type="button">Speichern</button>
+        <button id="deleteFolderButton" class="danger-text-button" type="button">Ordner löschen</button>
+    </main>
+</section>
+
+<section id="reviewEditorScreen" class="screen">
+    <header class="topbar">
+        <button id="backFromReviewEditor" class="icon-button" type="button" aria-label="Zurück">‹</button>
+        <h1 id="reviewEditorHeading">Rezension</h1>
+        <button id="reviewPdfButton" class="small-top-button" type="button">PDF</button>
+    </header>
+
+    <main class="form-content review-editor-form">
+        <label for="reviewEntryTitle">Titel</label>
+        <input id="reviewEntryTitle" type="text" autocomplete="off">
+
+        <label for="reviewEntryRating">Bewertung</label>
+        <select id="reviewEntryRating">
+            <option value=""></option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+        </select>
+
+        <label for="reviewEntrySummary">Zusammenfassung</label>
+        <textarea id="reviewEntrySummary"></textarea>
+
+        <label for="reviewEntryInterpretation">Deutung</label>
+        <textarea id="reviewEntryInterpretation"></textarea>
+
+        <label for="reviewEntryReview">Bewertung</label>
+        <textarea id="reviewEntryReview"></textarea>
+
+        <label for="reviewEntryFolder">Ordner</label>
+        <select id="reviewEntryFolder"></select>
+
+        <div id="reviewEntryError" class="form-error"></div>
+
+        <button id="saveReviewEntryButton" class="primary-button" type="button">Speichern</button>
+        <button id="deleteReviewEntryButton" class="danger-text-button" type="button">Löschen</button>
+    </main>
+</section>
+
+</body>
+</html>
